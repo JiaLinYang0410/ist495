@@ -1,35 +1,20 @@
 import os
+import shutil
 from datetime import datetime
 
-def create_finviz_csv(downloads_folder):
-    # Check if the "Downloads" folder exists
-    if not os.path.isdir(downloads_folder):
-        print(f"The directory {downloads_folder} does not exist.")
-        return
+# Get current date and time
+current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    # Get current date and time
-    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+# Path to the Downloads folder on a Mac
+downloads_folder = os.path.expanduser("~/Downloads")
 
-    # Convert datetime object to string
-    str_current_datetime = str(current_datetime)
-
-    # Original filename
-    original_filename = "finviz.csv"
-    
-    # Create the new filename with datetime
-    new_filename = f"finviz_{str_current_datetime}.csv"
-    
-    # Create the full path for the original and new files
-    original_file_path = os.path.join(downloads_folder, original_filename)
-    new_file_path = os.path.join(downloads_folder, new_filename)
-
-    # Rename the file with datetime
-    os.rename(original_file_path, new_file_path)
-
-    print(f"File renamed from {original_file_path} to {new_file_path}")
-
-# Define the "Downloads" folder path
-downloads_folder = "/Users//Downloads"  # Replace "your_username" with your actual username
-
-# Call the function to rename the file
-create_finviz_csv(downloads_folder)
+# Look for files named "finviz" in the Downloads folder
+for file_name in os.listdir(downloads_folder):
+    if file_name.startswith("finviz"):
+        file_path = os.path.join(downloads_folder, file_name)
+        # Generate new filename with current datetime appended
+        new_file_name = f"finviz_{current_datetime}.csv"
+        new_file_path = os.path.join(downloads_folder, new_file_name)
+        # Rename the file
+        shutil.move(file_path, new_file_path)
+        print(f"File renamed: {file_name} -> {new_file_name}")
