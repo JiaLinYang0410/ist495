@@ -1,40 +1,35 @@
 import os
-import shutil
 from datetime import datetime
 
-def rename_finviz_files(directory, old_pattern, new_pattern):
-    # Ensure the directory exists
-    if not os.path.isdir(directory):
-        print(f"The directory {directory} does not exist.")
+def create_finviz_csv(downloads_folder):
+    # Check if the "Downloads" folder exists
+    if not os.path.isdir(downloads_folder):
+        print(f"The directory {downloads_folder} does not exist.")
         return
 
-    # List all files in the directory
-    files = os.listdir(directory)
+    # Get current date and time
+    current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    for filename in files:
-        if old_pattern in filename:
-            # Extracting the original file extension
-            file_extension = os.path.splitext(filename)[1]
+    # Convert datetime object to string
+    str_current_datetime = str(current_datetime)
 
-            # Define the new filename
-            new_filename = new_pattern.format(datetime.now().strftime("%Y%m%d%H%M%S")) + file_extension
+    # Original filename
+    original_filename = "finviz.csv"
+    
+    # Create the new filename with datetime
+    new_filename = f"finviz_{str_current_datetime}.csv"
+    
+    # Create the full path for the original and new files
+    original_file_path = os.path.join(downloads_folder, original_filename)
+    new_file_path = os.path.join(downloads_folder, new_filename)
 
-            # Create the full path for the old and new filenames
-            old_file = os.path.join(directory, filename)
-            new_file = os.path.join(directory, new_filename)
+    # Rename the file with datetime
+    os.rename(original_file_path, new_file_path)
 
-            # Rename the file
-            shutil.move(old_file, new_file)
-            print(f"Renamed {old_file} to {new_file}")
+    print(f"File renamed from {original_file_path} to {new_file_path}")
 
-# Directory where the Finviz files are located
-directory = "/home/Agendia Morfaw/Documents/Finviz"
+# Define the "Downloads" folder path
+downloads_folder = "/Users/AgendiaMorfaw/Downloads" 
 
-# Pattern in the old filenames to identify Finviz files
-old_pattern = "Finviz"
-
-# New naming convention: e.g., "Finviz_{timestamp}.csv"
-new_pattern = "Finviz_{}"
-
-# Call the function to rename the files
-rename_finviz_files(directory, old_pattern, new_pattern)
+# Call the function to rename the file
+create_finviz_csv(downloads_folder)
