@@ -29,7 +29,7 @@ def create_finviz_csv(downloads_folder):
     print(f"File renamed from {original_file_path} to {new_file_path}")
 
 # Define the "Downloads" folder path
-downloads_folder = "/Users/AgendiaMorfaw/Downloads" 
+downloads_folder = "/Users//Downloads"  # Replace "your_username" with your actual username
 
 # Call the function to rename the file
 create_finviz_csv(downloads_folder)
