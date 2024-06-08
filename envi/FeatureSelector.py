@@ -36,15 +36,32 @@ import requests
 stocks = ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META']
 data = []
 
+# Define the specific features we want to evaluate
+features_to_evaluate = ['Avg Volume', 'Rel Volume', 'Float', 'Price', 'Gap', 'Volume']
+time_period_minutes = 390
+
+
 for stock in stocks:
     try:
         stock_data = finvizfinance(stock).ticker_fundament()
+        if 'Float' in stock_data and 'Volume' in stock_data:
+            stock_data['Float per min'] = stock_data['Float'] / time_period_minutes
+            stock_data['Volume per min'] = stock_data['Volume'] / time_period_minutes
+            filtered_data = {key: stock_data[key] for key in features_to_evaluate + ['Float per min', 'Volume per min'] if key in stock_data}
         stock_data['Ticker'] = stock
         data.append(stock_data)
     except requests.exceptions.HTTPError as e:
         print(f"Failed to retrieve data for {stock}: {e}")
     except Exception as e:
         print(f"An error occurred for {stock}: {e}")
+        filtered_data = {key: stock_data[key] for key in features_to_evaluate if key in stock_data}
+        filtered_data['Ticker'] = stock  # Add the ticker back in
+        data.append(filtered_data)
+    except requests.exceptions.HTTPError as e:
+        print(f"Failed to retrieve data for {stock}: {e}")
+    except Exception as e:
+        print(f"An error occurred for {stock}: {e}")
+
 
 # convert list of dictionary to DataFrame if data is not empty
 if data:
@@ -83,13 +100,13 @@ all_features = num_features.to_list() + cat_features.tolist()
 
 # feature selection
 # using SelectKBest to select top features based on ANOVA F-value
-selector = SelectKBest(score_func=f_classif, k=5)  # adjust 'k' as needed
+selector = SelectKBest(score_func=f_classif, k='all')  # adjust 'k' as needed
 X_new = selector.fit_transform(X_processed, y)
 
 # get selected feature names
 selected_features = [all_features[i] for i in selector.get_support(indices=True)]
 
-print("Selected Features:")
+print("Selected Features (using SelectKBest):")
 print(selected_features)
 
 # can also use feature importance from RandomForest
