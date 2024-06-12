@@ -1,6 +1,7 @@
 import os
 import shutil
 from datetime import datetime
+import pandas as pd
 
 
 # Get current date and time
@@ -9,9 +10,12 @@ current_datetime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 # Path to the Downloads folder on a Mac
 downloads_folder = os.path.expanduser("~/Downloads")
 
+
 # Look for files named "finviz" in the Downloads folder
+file_found = False
 for file_name in os.listdir(downloads_folder):
-    if file_name.startswith("finviz"):
+    if file_name.startswith("finviz") and file_name.endswith(".csv"):
+        file_found = True
         file_path = os.path.join(downloads_folder, file_name)
         # Generate new filename with current datetime appended
         new_file_name = f"finviz_{current_datetime}.csv"
@@ -19,6 +23,16 @@ for file_name in os.listdir(downloads_folder):
         # Rename the file
         shutil.move(file_path, new_file_path)
         print(f"File renamed: {file_name} -> {new_file_name}")
+
+        # Load the renamed CSV file into a DataFrame
+        data_import = pd.read_csv(new_file_path)
+        print("Raw data loaded from CSV:")
+        print(data_import.head())
+        break
+
+if not file_found:
+    print("No 'finviz' CSV files found in the Downloads folder.")
+    exit()
        
        # import libraries
 import pandas as pd
