@@ -1,4 +1,3 @@
-# Import necessary libraries
 import os
 import shutil
 from datetime import datetime
@@ -8,13 +7,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_selection import SelectKBest, f_classif
 from tabulate import tabulate
-import requests
-
-# Define the specific features we want to evaluate
-features_to_evaluate = ['Avg Volume', 'Rel Volume', 'Float', 'Price', 'Gap', 'Volume']
-time_period_minutes = 390
 
 # Path to the Downloads folder
 downloads_folder = os.path.expanduser("~/Downloads")
@@ -78,12 +71,21 @@ all_features = num_features.to_list() + cat_features.tolist()
 rf = RandomForestClassifier()
 rf.fit(X_processed, y)
 importances = rf.feature_importances_
-importance_df = pd.DataFrame({'Feature': all_features, 'Importance': importances})
+
+# Aggregate importances for categorical features
+cat_feature_importances = {}
+for i, col in enumerate(categorical_cols):
+    start_idx = len(numeric_cols) + i * len(preprocessor.named_transformers_['cat'].categories_[i])
+    end_idx = start_idx + len(preprocessor.named_transformers_['cat'].categories_[i])
+    cat_feature_importances[col] = sum(importances[start_idx:end_idx])
+
+# Combine with numeric feature importances
+feature_importances = {**dict(zip(num_features, importances[:len(numeric_cols)])), **cat_feature_importances}
+
+# Create a DataFrame for importances
+importance_df = pd.DataFrame(list(feature_importances.items()), columns=['Feature', 'Importance'])
 importance_df = importance_df.sort_values(by='Importance', ascending=False)
 
-# Calculate 'Float per minute' and 'Volume per minute'
-df['Volume_per_min'] = df['Volume'] / time_period_minutes
-
-
+# Print feature importances
 print("Feature Importances:")
-print(importance_df)
+print(tabulate(importance_df, headers='keys', tablefmt='psql'))
