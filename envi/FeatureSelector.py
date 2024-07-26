@@ -30,9 +30,20 @@ def main():
             # Load the CSV data into a DataFrame
             df = pd.read_csv(StringIO(csv_data))
             
+             # Calculate Float_per_minute and Volume_per_minute
+            if 'Shares Float' in df.columns and 'Volume' in df.columns:
+                df['Float_per_minute'] = df['Shares Float'] / 12 / 60
+                df['Volume_per_minute'] = df['Volume'] / 12 / 60
+                df['Volume_per_Float_ratio'] = df['Volume_per_minute'] / df['Float_per_minute']
+            else:
+                print("Warning: 'Shares Float' or 'Volume' column(s) not found in the data.")
+            
             # Display the first few rows of the dataframe to understand its structure
+            preview_columns = ['Ticker', 'Change','Market Cap', 'Short Ratio', 'Short Interest', 'Volume', 'Float %', 'Shares Float', 'Gap', 'Average Volume', 'Relative Volume', 'Price', 'Float_per_minute', 'Volume_per_minute']
+            # Ensure the preview columns exist in the DataFrame
+            preview_columns = [col for col in preview_columns if col in df.columns]
             print("Data preview:")
-            print(df.head(20))
+            print(df[preview_columns].head(20))
             
             # Drop rows with missing target values
             df = df.dropna(subset=['Change'])
