@@ -20,7 +20,7 @@ def fetch_stock_data(api_url):
 # Main function to run the script
 def main():
     # API URL with your specific filters and API token
-    api_url = "https://elite.finviz.com/export.ashx?v=152&p=i1&f=cap_0.01to,geo_usa|china|france|europe|australia|belgium|canada|chinahongkong|germany|hongkong|iceland|japan|newzealand|ireland|netherlands|norway|singapore|southkorea|sweden|taiwan|unitedarabemirates|unitedkingdom|switzerland|spain,sh_curvol_o1000,sh_price_u50,sh_relvol_o5,ta_change_u&ft=4&o=-change&ar=10&c=0,1,2,6,25,85,30,31,84,61,63,64,67,65,66&auth=954be273-27b2-4b64-bc09-2130f742052e"
+    api_url = "https://elite.finviz.com/export.ashx?v=152&p=i1&f=cap_0.01to,geo_usa|china|france|europe|australia|belgium|canada|chinahongkong|germany|hongkong|iceland|japan|newzealand|ireland|netherlands|norway|singapore|southkorea|sweden|taiwan|unitedarabemirates|unitedkingdom|switzerland|spain,sh_curvol_o1000,sh_price_u50,sh_relvol_o5,ta_change_u&ft=4&o=-change&ar=10&c=0,1,2,6,25,85,30,31,84,61,63,64,67,65,66&auth=66b77c09-ec07-46b7-8b88-aabcae044aef"
     
     try:
         # Fetch stock data
@@ -32,7 +32,7 @@ def main():
             
             # Display the first few rows of the dataframe to understand its structure
             print("Data preview:")
-            print(df.head())
+            print(df.head(20))
             
             # Drop rows with missing target values
             df = df.dropna(subset=['Change'])
