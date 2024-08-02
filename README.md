@@ -58,4 +58,4 @@ The script performs the following tasks:
 The script uses a specific API URL with filters to fetch the stock data. Make sure you have access to the Finviz Elite API and have the correct API token.
 
 ```python
-api_url = "https://elite.finviz.com/export.ashx?v=152&p=i1&f=cap_0.001to,geo_usa%7Cchina%7Cfrance%7Ceurope%7Caustralia%7Cbelgium%7Ccanada%7Cchinahongkong%7Cgermany%7Chongkong%7Ciceland%7Cjapan%7Cnewzealand%7Cireland%7Cnetherlands%7Cnorway%7Csingapore%7Csouthkorea%7Csweden%7Ctaiwan%7Cunitedarabemirates%7Cunitedkingdom%7Cswitzerland%7Cspain,sh_curvol_o100,sh_relvol_o2,ta_change_u&ft=4&o=-change&ar=10&c=0,1,2,6,24,25,85,26,27,28,29,30,31,84,50,51,83,61,63,64,67,65,66,71&auth=YOUR_API_TOKEN"
+api_url = "https://elite.finviz.com/export.ashx?v=152&p=i1&f=cap_0.001to,geo_usa|china|france|europe|australia|belgium|canada|chinahongkong|germany|hongkong|iceland|japan|newzealand|ireland|netherlands|norway|singapore|southkorea|sweden|taiwan|unitedarabemirates|unitedkingdom|switzerland|spain,sh_curvol_o100,sh_relvol_o2,ta_change_u&ft=4&o=-change&ar=10&c=1,6,24,25,85,26,27,28,29,30,31,84,50,51,83,61,63,64,67,65,66,71&auth=YOUR_API_TOKEN"
